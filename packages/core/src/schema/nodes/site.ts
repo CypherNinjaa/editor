@@ -32,10 +32,7 @@ export const SiteNode = BaseNode.extend({
       [-15, 15],
     ],
   }),
-  // terrain: TerrainData,
-  children: z
-    .array(z.discriminatedUnion('type', [BuildingNode, ItemNode]))
-    .default([BuildingNode.parse({})]),
+  children: z.array(z.union([BuildingNode.shape.id, ItemNode.shape.id])).default([]),
 }).describe(
   dedent`
   Site node - used to represent a site

@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import { CreateSceneButton } from '@/components/save-button'
+import { SceneActions } from '@/components/scene-actions'
 import type { SceneMeta } from '@/components/scene-loader'
 
 export const dynamic = 'force-dynamic'
@@ -80,9 +81,9 @@ export default async function ScenesPage() {
         ) : (
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {scenes.map((scene) => (
-              <li key={scene.id}>
+              <li key={scene.id} className="group flex flex-col overflow-hidden rounded-xl border border-border/60 bg-background transition-colors hover:border-border hover:bg-accent/30">
                 <Link
-                  className="group block rounded-xl border border-border/60 bg-background p-4 transition-colors hover:border-border hover:bg-accent/30"
+                  className="block flex-1 p-4 pb-2"
                   href={`/scene/${scene.id}`}
                 >
                   <div className="flex aspect-video items-center justify-center overflow-hidden rounded-lg bg-accent/30">
@@ -107,6 +108,9 @@ export default async function ScenesPage() {
                     </div>
                   </div>
                 </Link>
+                <div className="px-4 pb-4">
+                  <SceneActions sceneId={scene.id} sceneName={scene.name} version={scene.version} />
+                </div>
               </li>
             ))}
           </ul>
