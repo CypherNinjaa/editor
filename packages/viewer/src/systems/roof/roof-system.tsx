@@ -248,6 +248,11 @@ function updateMergedRoofGeometry(
         ? combined.material
         : [combined.material]
 
+      const safeGroups = resultGeo.groups.filter((group) => Boolean(group))
+      if (safeGroups.length !== resultGeo.groups.length) {
+        resultGeo.groups = safeGroups
+      }
+
       const matToIndex = new Map<THREE.Material, number>([
         [dummyMats[0], 0],
         [dummyMats[1], 1],
@@ -255,7 +260,7 @@ function updateMergedRoofGeometry(
         [dummyMats[3], 3],
       ])
 
-      for (const g of resultGeo.groups) {
+      for (const g of safeGroups) {
         g.materialIndex = mapRoofGroupMaterialIndex(g.materialIndex, resultMaterials, matToIndex)
       }
 
@@ -620,6 +625,11 @@ export function generateRoofSegmentGeometry(node: RoofSegmentNode): THREE.Buffer
       ? combined.material
       : [combined.material]
 
+    const safeGroups = resultGeo.groups.filter((group) => Boolean(group))
+    if (safeGroups.length !== resultGeo.groups.length) {
+      resultGeo.groups = safeGroups
+    }
+
     const matToIndex = new Map<THREE.Material, number>([
       [dummyMats[0], 0],
       [dummyMats[1], 1],
@@ -627,7 +637,7 @@ export function generateRoofSegmentGeometry(node: RoofSegmentNode): THREE.Buffer
       [dummyMats[3], 3],
     ])
 
-    for (const group of resultGeo.groups) {
+    for (const group of safeGroups) {
       group.materialIndex = mapRoofGroupMaterialIndex(
         group.materialIndex,
         resultMaterials,
@@ -670,7 +680,8 @@ function remapRoofShellFaces(geometry: THREE.BufferGeometry, node: RoofSegmentNo
   const position = geometry.getAttribute('position')
   const index = geometry.getIndex()
 
-  if (!(position && index) || index.count === 0 || geometry.groups.length === 0) return
+  const safeGroups = geometry.groups.filter((group) => Boolean(group))
+  if (!(position && index) || index.count === 0 || safeGroups.length === 0) return
 
   geometry.computeBoundingBox()
 
@@ -684,7 +695,7 @@ function remapRoofShellFaces(geometry: THREE.BufferGeometry, node: RoofSegmentNo
   const centroid = new THREE.Vector3()
   const normal = new THREE.Vector3()
 
-  for (const group of geometry.groups) {
+  for (const group of safeGroups) {
     const startTriangle = Math.floor(group.start / 3)
     const endTriangle = Math.min(triangleCount, Math.floor((group.start + group.count) / 3))
 

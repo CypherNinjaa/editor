@@ -152,6 +152,7 @@ const ModelRenderer = ({ node }: { node: ItemNode }) => {
           const matCount = mesh.material.length
           if (mesh.geometry.groups.length > 0) {
             for (const group of mesh.geometry.groups) {
+              if (!group) continue
               if (group.materialIndex !== undefined && group.materialIndex >= matCount) {
                 group.materialIndex = 0
               }
