@@ -2,7 +2,6 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { cloneSceneGraph } from '@pascal-app/core/clone-scene-graph'
 import type { AnyNode, AnyNodeId } from '@pascal-app/core/schema'
 import { z } from 'zod'
-import { rehydrateSiteChildren } from '../../lib/rehydrate-site-children'
 import type { SceneOperations } from '../../operations'
 import { isTemplateId, TEMPLATES, type TemplateId } from '../../templates'
 import { ErrorCode, throwMcpError } from '../errors'
@@ -80,10 +79,8 @@ export function registerCreateFromTemplate(server: McpServer, bridge: SceneOpera
 
       const entry = TEMPLATES[id as TemplateId]
       // Clone: regenerate ids so each instantiation is independent.
-      // `cloneSceneGraph` flattens SiteNode.children to string ids; rehydrate
-      // them back to embedded objects to satisfy the SiteNode schema (see
-      // CROSS_CUTTING §2).
-      const cloned = rehydrateSiteChildren(cloneSceneGraph(entry.template))
+      // cloneSceneGraph flattens SiteNode.children to string ids, which now perfectly matches the schema!
+      const cloned = cloneSceneGraph(entry.template)
       const nodes = cloned.nodes as Record<AnyNodeId, AnyNode>
       const rootNodeIds = cloned.rootNodeIds as AnyNodeId[]
 
