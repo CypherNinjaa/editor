@@ -496,4 +496,35 @@ export function ViewerToolbarRight() {
   }, [importError])
 
   return (
-   
+    <>
+      {importError && (
+        <div className="pointer-events-auto fixed top-16 left-1/2 z-50 w-[min(92vw,420px)] -translate-x-1/2 rounded-lg border border-destructive/50 bg-background/95 px-3 py-2 text-xs text-destructive shadow-xl backdrop-blur">
+          <div className="flex items-start justify-between gap-3">
+            <span>{importError}</span>
+            <button
+              className="shrink-0 rounded-md px-1.5 py-0.5 text-[11px] text-destructive/80 hover:bg-destructive/10"
+              onClick={() => setImportError(null)}
+              type="button"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+      <div className={TOOLBAR_CONTAINER}>
+        <LevelModeToggle />
+        <WallModeToggle />
+        <GridSnapToggle />
+        <GridVisibilityToggle />
+        <div className="my-1.5 w-px bg-border/50" />
+        <UnitToggle />
+        <ThemeToggle />
+        <CameraModeToggle />
+        <div className="my-1.5 w-px bg-border/50" />
+        <WalkthroughButton />
+        <LoadJsonButton onError={setImportError} />
+        <PreviewButton />
+      </div>
+    </>
+  )
+}
